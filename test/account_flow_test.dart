@@ -81,6 +81,7 @@ void main() {
     expect(find.text('Test Student'), findsNWidgets(2));
     expect(find.text('34567'), findsOneWidget);
     expect(DemoAccount.created, 0);
+    await tester.ensureVisible(find.text('Created'));
     await tester.tap(find.text('Created'));
     await tester.pumpAndSettle();
     expect(
