@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'routes.dart';
-import 'utils/colors.dart';
+import 'utils/theme_controller.dart';
 
 void main() {
   runApp(const CoSUtudyApp());
@@ -12,17 +12,20 @@ class CoSUtudyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'CoSUtudy',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
-        scaffoldBackgroundColor: AppColors.background,
-        useMaterial3: true,
-        // fontFamily: 'Poppins', // custom font: enable after adding it to pubspec.yaml
-      ),
-      initialRoute: AppRoutes.login,
-      routes: AppRoutes.routes,
+    // Rebuilds MaterialApp whenever the user switches between light and dark mode.
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: ThemeController.mode,
+      builder: (context, mode, _) {
+        return MaterialApp(
+          title: 'CoSUtudy',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeController.buildTheme(Brightness.light),
+          darkTheme: ThemeController.buildTheme(Brightness.dark),
+          themeMode: mode,
+          initialRoute: AppRoutes.login,
+          routes: AppRoutes.routes,
+        );
+      },
     );
   }
 }

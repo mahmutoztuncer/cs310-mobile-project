@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../models/announcement.dart';
-import '../utils/colors.dart';
 import '../utils/spacing.dart';
 import '../utils/text_styles.dart';
+import '../utils/theme_controller.dart';
 import '../widgets/announcement_card.dart';
 
 /// Home: lists all open announcements, with search by course code
@@ -44,13 +44,23 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final items = _filtered;
+    final colors = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('CoSUtudy', style: AppTextStyles.appTitle),
-        backgroundColor: AppColors.surface,
-        elevation: 0,
+        title: Text(
+          'CoSUtudy',
+          style: AppTextStyles.appTitle.copyWith(color: colors.primary),
+        ),
+        actions: [
+          IconButton(
+            tooltip: ThemeController.isDark ? 'Light mode' : 'Dark mode',
+            icon: Icon(ThemeController.isDark
+                ? Icons.light_mode_outlined
+                : Icons.dark_mode_outlined),
+            onPressed: ThemeController.toggle,
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -74,16 +84,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                       ),
                 filled: true,
-                fillColor: AppColors.surface,
+                fillColor: colors.surface,
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: AppSpacing.sm),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(AppSpacing.radius),
-                  borderSide: const BorderSide(color: AppColors.border),
+                  borderSide: BorderSide(color: colors.outlineVariant),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(AppSpacing.radius),
-                  borderSide: const BorderSide(color: AppColors.border),
+                  borderSide: BorderSide(color: colors.outlineVariant),
                 ),
               ),
             ),
@@ -101,9 +111,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: ChoiceChip(
                     label: Text(entry.key),
                     selected: selected,
-                    selectedColor: AppColors.primary,
+                    selectedColor: colors.primary,
+                    checkmarkColor: colors.onPrimary,
                     labelStyle: selected
-                        ? AppTextStyles.chip.copyWith(color: Colors.white)
+                        ? AppTextStyles.chip.copyWith(color: colors.onPrimary)
                         : AppTextStyles.chip,
                     onSelected: (_) =>
                         setState(() => _selectedType = entry.value),
@@ -117,9 +128,12 @@ class _HomeScreenState extends State<HomeScreen> {
           // Announcement list
           Expanded(
             child: items.isEmpty
-                ? const Center(
-                    child: Text('No announcements found',
-                        style: AppTextStyles.body),
+                ? Center(
+                    child: Text(
+                      'No announcements found',
+                      style: AppTextStyles.body
+                          .copyWith(color: colors.onSurfaceVariant),
+                    ),
                   )
                 : ListView.builder(
                     padding: const EdgeInsets.only(bottom: 80), // room for FAB
@@ -141,9 +155,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.primary,
+        backgroundColor: colors.primary,
         onPressed: () => Navigator.pushNamed(context, '/create'),
-        child: const Icon(Icons.add, color: Colors.white),
+        child: Icon(Icons.add, color: colors.onPrimary),
       ),
     );
   }

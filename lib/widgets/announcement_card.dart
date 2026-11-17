@@ -25,6 +25,8 @@ class AnnouncementCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final a = announcement;
+    final colors = Theme.of(context).colorScheme;
+    final secondary = colors.onSurfaceVariant;
 
     return Card(
       margin: const EdgeInsets.symmetric(
@@ -34,7 +36,7 @@ class AnnouncementCard extends StatelessWidget {
       elevation: 1,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppSpacing.radius),
-        side: const BorderSide(color: AppColors.border),
+        side: BorderSide(color: colors.outlineVariant),
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -51,7 +53,7 @@ class AnnouncementCard extends StatelessWidget {
                   const Spacer(),
                   Text(
                     '${a.joinedCount}/${a.capacity} joined',
-                    style: AppTextStyles.caption,
+                    style: AppTextStyles.caption.copyWith(color: secondary),
                   ),
                   if (trailing != null) ...[
                     const SizedBox(width: AppSpacing.xs),
@@ -76,13 +78,13 @@ class AnnouncementCard extends StatelessWidget {
                 const SizedBox(height: AppSpacing.xs),
                 Row(
                   children: [
-                    const Icon(Icons.location_on_outlined,
-                        size: 16, color: AppColors.textSecondary),
+                    Icon(Icons.location_on_outlined,
+                        size: 16, color: secondary),
                     const SizedBox(width: AppSpacing.xs),
                     Expanded(
                       child: Text(
                         '${a.location} · ${AppDateUtils.formatDateTime(a.dateTime!)}',
-                        style: AppTextStyles.body,
+                        style: AppTextStyles.body.copyWith(color: secondary),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -97,14 +99,14 @@ class AnnouncementCard extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 12,
-                    backgroundColor: AppColors.border,
+                    backgroundColor: colors.surfaceContainerHighest,
                     backgroundImage: NetworkImage(a.creatorPhotoUrl),
                   ),
                   const SizedBox(width: AppSpacing.sm),
                   Expanded(
                     child: Text(
                       a.creatorName,
-                      style: AppTextStyles.caption,
+                      style: AppTextStyles.caption.copyWith(color: secondary),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
