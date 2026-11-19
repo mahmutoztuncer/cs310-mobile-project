@@ -1,22 +1,54 @@
 import 'package:flutter/material.dart';
 
 import '../models/announcement.dart';
+import '../models/my_activity.dart';
 import '../utils/date_utils.dart';
 import '../utils/spacing.dart';
 import '../utils/text_styles.dart';
 import '../widgets/announcement_card.dart';
+import 'account_widgets.dart';
 
-/// Shows the full information of one announcement.
+/// Shows the full information of one announcement and lets the user
+/// join or leave it.
 /// Home opens it with:
 /// Navigator.pushNamed(context, '/details', arguments: announcement)
-class DetailsScreen extends StatelessWidget {
+class DetailsScreen extends StatefulWidget {
   const DetailsScreen({super.key});
+
+  @override
+  State<DetailsScreen> createState() => _DetailsScreenState();
+}
+
+class _DetailsScreenState extends State<DetailsScreen> {
+  void _toggleJoin(Announcement a) {
+    final wasJoined = MyActivity.hasJoined(a.id);
+    // setState rebuilds the screen so the button, count and bar update.
+    setState(() {
+      if (wasJoined) {
+        MyActivity.leave(a.id);
+      } else {
+        MyActivity.join(a.id);
+      }
+    });
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+        content: Text(wasJoined
+            ? 'You left this announcement.'
+            : 'You joined this announcement.'),
+      ));
+  }
 
   @override
   Widget build(BuildContext context) {
     // The announcement that was tapped on Home.
     final a = ModalRoute.of(context)!.settings.arguments as Announcement;
     final colors = Theme.of(context).colorScheme;
+
+    final joined = MyActivity.hasJoined(a.id);
+    final joinedCount = a.joinedCount + (joined ? 1 : 0);
+    final isOwner = a.creatorName == DemoAccount.fullName;
+    final isFull = joinedCount >= a.capacity;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Announcement Details')),
@@ -89,7 +121,7 @@ class DetailsScreen extends StatelessWidget {
               ),
               const SizedBox(height: AppSpacing.lg),
               _ParticipantsSection(
-                joined: a.joinedCount,
+                joined: joinedCount,
                 capacity: a.capacity,
               ),
               const SizedBox(height: AppSpacing.lg),
@@ -101,6 +133,31 @@ class DetailsScreen extends StatelessWidget {
                     .copyWith(color: colors.onSurfaceVariant),
               ),
             ],
+          ),
+        ),
+      ),
+
+      // Action button stays at the bottom while the content scrolls.
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.md),
+          child: SizedBox(
+            width: double.infinity,
+            height: 48,
+            child: isOwner
+                ? const FilledButton(
+              onPressed: null,
+              child: Text('You created this announcement'),
+            )
+                : joined
+                ? OutlinedButton(
+              onPressed: () => _toggleJoin(a),
+              child: const Text('Leave'),
+            )
+                : FilledButton(
+              onPressed: isFull ? null : () => _toggleJoin(a),
+              child: Text(isFull ? 'Full' : 'Join'),
+            ),
           ),
         ),
       ),
