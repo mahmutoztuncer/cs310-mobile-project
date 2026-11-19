@@ -88,6 +88,11 @@ class DetailsScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: AppSpacing.lg),
+              _ParticipantsSection(
+                joined: a.joinedCount,
+                capacity: a.capacity,
+              ),
+              const SizedBox(height: AppSpacing.lg),
               const Text('Description', style: AppTextStyles.cardTitle),
               const SizedBox(height: AppSpacing.sm),
               Text(
@@ -102,6 +107,7 @@ class DetailsScreen extends StatelessWidget {
     );
   }
 }
+
 /// One label/value pair shown in the info card.
 class _InfoRow {
   final String label;
@@ -148,6 +154,50 @@ class _InfoCard extends StatelessWidget {
           ],
         ],
       ),
+    );
+  }
+}
+
+/// Joined count, progress bar and remaining places.
+class _ParticipantsSection extends StatelessWidget {
+  final int joined;
+  final int capacity;
+  const _ParticipantsSection({required this.joined, required this.capacity});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final left = capacity - joined;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            const Expanded(
+              child: Text('Participants', style: AppTextStyles.cardTitle),
+            ),
+            Text(
+              '$joined/$capacity joined',
+              style: AppTextStyles.caption
+                  .copyWith(color: colors.onSurfaceVariant),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.sm),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(AppSpacing.xs),
+          child: LinearProgressIndicator(
+            value: capacity == 0 ? 0 : joined / capacity,
+            minHeight: 6,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.xs),
+        Text(
+          left > 0 ? '$left ${left == 1 ? 'place' : 'places'} left' : 'Full',
+          style: AppTextStyles.caption.copyWith(color: colors.onSurfaceVariant),
+        ),
+      ],
     );
   }
 }
