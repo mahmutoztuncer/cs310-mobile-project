@@ -134,7 +134,7 @@ class AnnouncementCard extends StatelessWidget {
 
 class AnnouncementTypeTag extends StatelessWidget {
   final AnnouncementType type;
-  const AnnouncementTypeTag({required this.type});
+  const AnnouncementTypeTag({super.key, required this.type});
 
   @override
   Widget build(BuildContext context) {
