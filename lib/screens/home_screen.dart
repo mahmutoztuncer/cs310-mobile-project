@@ -156,7 +156,10 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: colors.primary,
-        onPressed: () => Navigator.pushNamed(context, '/create'),
+        onPressed: () => Navigator.pushNamed(context, '/create').then((_) {
+          // Refresh the list after returning from Create Announcement.
+          if (mounted) setState(() {});
+        }),
         child: Icon(Icons.add, color: colors.onPrimary),
       ),
     );
