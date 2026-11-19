@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/announcement.dart';
 import '../models/my_activity.dart';
 import '../utils/spacing.dart';
+import '../utils/text_styles.dart';
 import '../widgets/announcement_card.dart';
 import 'account_widgets.dart';
 
@@ -105,11 +106,15 @@ class _MyAnnouncementsScreenState extends State<MyAnnouncementsScreen> {
                   items: created,
                   actionLabel: 'Remove',
                   onAction: _remove,
+                  emptyMessage: 'You haven\'t created any announcements yet.\n'
+                      'Tap + on Home to create one.',
                 ),
                 _AnnouncementList(
                   items: joined,
                   actionLabel: 'Leave',
                   onAction: _leave,
+                  emptyMessage: 'You haven\'t joined any announcements yet.\n'
+                      'Browse Home to find a study session or team.',
                 ),
               ],
             ),
@@ -121,20 +126,48 @@ class _MyAnnouncementsScreenState extends State<MyAnnouncementsScreen> {
 }
 
 /// Scrollable list of announcement cards with one action button per card.
-/// Tapping a card opens Details.
+/// Shows a message instead when the list is empty.
 class _AnnouncementList extends StatelessWidget {
   final List<Announcement> items;
   final String actionLabel;
   final void Function(Announcement) onAction;
+  final String emptyMessage;
 
   const _AnnouncementList({
     required this.items,
     required this.actionLabel,
     required this.onAction,
+    required this.emptyMessage,
   });
 
   @override
   Widget build(BuildContext context) {
+    if (items.isEmpty) {
+      final colors = Theme.of(context).colorScheme;
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.inbox_outlined,
+                size: 48,
+                color: colors.onSurfaceVariant,
+              ),
+              const SizedBox(height: AppSpacing.sm),
+              Text(
+                emptyMessage,
+                textAlign: TextAlign.center,
+                style: AppTextStyles.body
+                    .copyWith(color: colors.onSurfaceVariant),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return ListView.builder(
       padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
       itemCount: items.length,
