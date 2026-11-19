@@ -13,4 +13,7 @@ class MyActivity {
 
   static void leave(String id) =>
       joinedIds.value = {...joinedIds.value}..remove(id);
+
+  /// Forget all joins (used on log out).
+  static void clear() => joinedIds.value = {};
 }

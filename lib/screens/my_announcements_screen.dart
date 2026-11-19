@@ -58,7 +58,6 @@ class _MyAnnouncementsScreenState extends State<MyAnnouncementsScreen> {
     if (!confirmed || !mounted) return;
     setState(() {
       sampleAnnouncements.removeWhere((x) => x.id == a.id);
-      DemoAccount.created--; // keeps the Profile count in sync
     });
     _showMessage('Announcement removed.');
   }
