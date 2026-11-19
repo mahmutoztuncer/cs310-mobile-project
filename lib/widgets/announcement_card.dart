@@ -49,7 +49,7 @@ class AnnouncementCard extends StatelessWidget {
               // Top row: type tag + capacity
               Row(
                 children: [
-                  _TypeTag(type: a.type),
+                  AnnouncementTypeTag(type: a.type),
                   const Spacer(),
                   Text(
                     '${a.joinedCount}/${a.capacity} joined',
@@ -132,9 +132,9 @@ class AnnouncementCard extends StatelessWidget {
   }
 }
 
-class _TypeTag extends StatelessWidget {
+class AnnouncementTypeTag extends StatelessWidget {
   final AnnouncementType type;
-  const _TypeTag({required this.type});
+  const AnnouncementTypeTag({super.key, required this.type});
 
   @override
   Widget build(BuildContext context) {
