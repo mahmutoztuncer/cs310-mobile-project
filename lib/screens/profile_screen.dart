@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'account_widgets.dart';
+import '../models/my_activity.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key, this.onMyAnnouncements});
@@ -103,7 +104,7 @@ class ProfileScreen extends StatelessWidget {
                           Expanded(
                             child: _activity(
                               context,
-                              DemoAccount.joined,
+                              MyActivity.joinedIds.value.length,
                               'Joined',
                             ),
                           ),

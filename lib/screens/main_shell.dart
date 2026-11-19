@@ -21,8 +21,11 @@ class _MainShellState extends State<MainShell> {
       body: IndexedStack(
         index: _index,
         children: [
-          const HomeScreen(),
-          const MyAnnouncementsScreen(),
+          // Not const, so these tabs rebuild with fresh data on tab switch.
+          // ignore: prefer_const_constructors
+          HomeScreen(),
+          // ignore: prefer_const_constructors
+          MyAnnouncementsScreen(),
           ProfileScreen(onMyAnnouncements: () => setState(() => _index = 1)),
         ],
       ),
