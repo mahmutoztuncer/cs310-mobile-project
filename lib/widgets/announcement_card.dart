@@ -94,13 +94,24 @@ class AnnouncementCard extends StatelessWidget {
               ],
               const SizedBox(height: AppSpacing.sm),
 
-              // Creator with network image avatar
               Row(
                 children: [
                   CircleAvatar(
                     radius: 12,
                     backgroundColor: colors.surfaceContainerHighest,
-                    backgroundImage: NetworkImage(a.creatorPhotoUrl),
+                    child: ClipOval(
+                      child: Image.network(
+                        a.creatorPhotoUrl,
+                        width: 24,
+                        height: 24,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => Icon(
+                          Icons.person_outline,
+                          size: 16,
+                          color: colors.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
                   ),
                   const SizedBox(width: AppSpacing.sm),
                   Expanded(
