@@ -61,7 +61,7 @@ class DateTimeFormField extends FormField<DateTime> {
                     isEmpty: !hasValue,
                     decoration: formFieldDecoration(
                       context,
-                      'Select date and time',
+                      '',
                       errorText: state.errorText,
                       suffixIcon: Icon(Icons.calendar_today_outlined,
                           size: 20, color: colors.onSurfaceVariant),
